@@ -8,9 +8,29 @@ import React from "react";
  * See https://github.com/mswjs/msw-storybook-addon#configuring-msw
  * to learn how to customize it
  */
-initialize();
+initialize({
+  onUnhandledRequest: ({ url, method }) => {
+    const pathname = new URL(url).pathname;
 
-const queryClient = new QueryClient();
+    if (pathname.startsWith("/api/v1")) {
+      console.error(`Unhandled ${method} request to ${url}.
+
+        This exception has been only logged in the console, however, it's strongly recommended to resolve this error as you don't want unmocked data in Storybook stories.
+
+        If you wish to mock an error response, please refer to this guide: https://mswjs.io/docs/recipes/mocking-error-responses
+      `);
+    }
+  },
+});
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    // queries: {
+    //   refetchInterval: 100,
+    //   refetchOnMount: true,
+    // },
+  },
+});
 
 const preview: Preview = {
   parameters: {

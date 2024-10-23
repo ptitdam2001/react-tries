@@ -10,6 +10,10 @@ export const UserList = () => {
   } else {
     return (
       <ul>
+        <li style={{ listStyle: "none", padding: 0, margin: 0 }}>
+          List of users
+        </li>
+        <hr />
         {Array.isArray(data) &&
           data.map((user) => (
             <li key={user.id}>
